@@ -1,20 +1,21 @@
-API Notes – Study Partner App
-Authentication
+# API Notes – Study Partner App
+
+## Authentication
 
 POST /api/auth/register
 POST /api/auth/login
 
-Users
+## Users
 
 GET /api/users/{id}
 PUT /api/users/{id}
 
-Swipe / Matching
+## Swipe / Matching
 
 POST /api/swipe/{targetUserId}
 GET /api/matches
 
-Chat
+## Chat
 
 GET /api/messages/{matchId}
 POST /api/messages
