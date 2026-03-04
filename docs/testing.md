@@ -1,22 +1,29 @@
 # API Testing Plan
 
-1. Register user
-   POST /api/auth/register
+## 1. Register user
 
-2. Login
-   POST /api/auth/login
+* POST /api/auth/register
 
-3. Get profile
-   GET /api/me
+## 2. Login
 
-4. Get swipe candidates
-   GET /api/swipe/candidates
+* POST /api/auth/login
 
-5. Swipe user
-   POST /api/swipe/{targetUserId}
+## 3. Get profile
 
-6. Get matches
-   GET /api/matches
+* GET /api/me
 
-7. Send message
-   POST /api/chats/{chatId}/messages
+## 4. Get swipe candidates
+
+* GET /api/swipe/candidates
+
+## 5. Swipe user
+
+* POST /api/swipe/{targetUserId}
+
+## 6. Get matches
+
+* GET /api/matches
+
+## 7. Send message
+
+* POST /api/chats/{chatId}/messages
