@@ -13,10 +13,6 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "match_id", unique = true)
-    private Match match;
-
     @Column(nullable = false)
     private Instant createdAt = Instant.now();
 }

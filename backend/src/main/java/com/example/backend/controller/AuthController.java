@@ -4,8 +4,14 @@ import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;
 import com.example.backend.dto.UserResponse;
 import com.example.backend.entity.User;
-import com.example.backend.repository.UserRepository;
+import com.example.backend.security.JwtUtil;
+import com.example.backend.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,18 +20,25 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public AuthController(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
     public UserResponse register(@RequestBody RegisterRequest req) {
-        if (userRepository.findByEmail(req.getEmail()).isPresent()) {
+
+        try {
+            userService.findByEmail(req.getEmail());
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+        } catch (RuntimeException ignored) {
         }
 
         User user = new User();
@@ -33,29 +46,25 @@ public class AuthController {
         user.setName(req.getName());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
 
-        User saved = userRepository.save(user);
-
-        UserResponse res = new UserResponse();
-        res.setId(saved.getId());
-        res.setEmail(saved.getEmail());
-        res.setName(saved.getName());
-        return res;
+        User saved = userService.getUserRepository().save(user);
+        return userService.toUserResponse(saved);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest req) {
-        User user = userRepository.findByEmail(req.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials"));
+    public String login(@RequestBody LoginRequest request){
 
-        if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
-        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                        )
+        );
 
-        return "login ok";
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = jwtUtil.generateToken(request.getEmail());
+        return token;
+
     }
 
-    @GetMapping("/me")
-    public String me() {
-        return "current user (JWT later)";
-    }
 }
