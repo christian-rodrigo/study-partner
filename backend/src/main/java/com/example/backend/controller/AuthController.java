@@ -32,6 +32,11 @@ public class AuthController {
         user.setEmail(req.getEmail());
         user.setName(req.getName());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setUniversity(req.getUniversity());
+        user.setCity(req.getCity());
+        user.setDegreeProgram(req.getDegreeProgram());
+        user.setSemester(req.getSemester());
+        user.setBio(req.getBio());
 
         User saved = userRepository.save(user);
 
@@ -39,6 +44,12 @@ public class AuthController {
         res.setId(saved.getId());
         res.setEmail(saved.getEmail());
         res.setName(saved.getName());
+        res.setUniversity(saved.getUniversity());
+        res.setCity(saved.getCity());
+        res.setDegreeProgram(saved.getDegreeProgram());
+        res.setSemester(saved.getSemester());
+        res.setBio(saved.getBio());
+
         return res;
     }
 

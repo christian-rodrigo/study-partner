@@ -7,6 +7,7 @@ import lombok.Data;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,5 +21,11 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    private String university;
+    private String city;
+    private String degreeProgram;
+    private Integer semester;
 
+    @Column(length = 1000)
+    private String bio;
 }
