@@ -28,4 +28,19 @@ public class User {
 
     @Column(length = 1000)
     private String bio;
+
+    private String language;
+    private String availableTime;
+
+    @Enumerated(EnumType.STRING)
+    private StudyMode studyMode;
+
+    @Enumerated(EnumType.STRING)
+    private LearningStyle learningStyle;
+
+    @Enumerated(EnumType.STRING)
+    private LearningGoal learningGoal;
+
+    @Enumerated(EnumType.STRING)
+    private StudyFrequency studyFrequency;
 }

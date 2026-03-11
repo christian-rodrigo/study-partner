@@ -7,16 +7,11 @@ import com.example.backend.entity.StudyMode;
 import lombok.Data;
 
 @Data
-public class UserResponse {
-    private Long id;
-    private String name;
-    private String email;
-
+public class UserSearchFilter {
     private String university;
     private String city;
     private String degreeProgram;
     private Integer semester;
-    private String bio;
 
     private String language;
     private String availableTime;

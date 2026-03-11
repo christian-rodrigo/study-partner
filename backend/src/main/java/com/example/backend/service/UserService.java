@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.UserResponse;
+import com.example.backend.dto.UserSearchFilter;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,6 @@ public class UserService {
 
     public UserResponse getUserById(Long id){
         User user = userRepository.findById(id).orElseThrow();
-
         return mapToResponse(user);
     }
 
@@ -29,18 +29,35 @@ public class UserService {
                 .toList();
     }
 
-    public List<UserResponse> searchUsers(String university, String city, String degreeProgram, Integer semester) {
-        return userRepository
-                .findAll()
+    public List<UserResponse> searchUsers(UserSearchFilter filter) {
+        return userRepository.findAll()
                 .stream()
-                .filter(user -> university == null || user.getUniversity() != null &&
-                        user.getUniversity().equalsIgnoreCase(university))
-                .filter(user -> city == null || user.getCity() != null &&
-                        user.getCity().equalsIgnoreCase(city))
-                .filter(user -> degreeProgram == null || user.getDegreeProgram() != null &&
-                        user.getDegreeProgram().equalsIgnoreCase(degreeProgram))
-                .filter(user -> semester == null || user.getSemester() != null &&
-                        user.getSemester().equals(semester))
+                .filter(user -> filter.getUniversity() == null ||
+                        (user.getUniversity() != null &&
+                                user.getUniversity().equalsIgnoreCase(filter.getUniversity())))
+                .filter(user -> filter.getCity() == null ||
+                        (user.getCity() != null &&
+                                user.getCity().equalsIgnoreCase(filter.getCity())))
+                .filter(user -> filter.getDegreeProgram() == null ||
+                        (user.getDegreeProgram() != null &&
+                                user.getDegreeProgram().equalsIgnoreCase(filter.getDegreeProgram())))
+                .filter(user -> filter.getSemester() == null ||
+                        (user.getSemester() != null &&
+                                user.getSemester().equals(filter.getSemester())))
+                .filter(user -> filter.getLanguage() == null ||
+                        (user.getLanguage() != null &&
+                                user.getLanguage().equalsIgnoreCase(filter.getLanguage())))
+                .filter(user -> filter.getAvailableTime() == null ||
+                        (user.getAvailableTime() != null &&
+                                user.getAvailableTime().equalsIgnoreCase(filter.getAvailableTime())))
+                .filter(user -> filter.getStudyMode() == null ||
+                        user.getStudyMode() == filter.getStudyMode())
+                .filter(user -> filter.getLearningStyle() == null ||
+                        user.getLearningStyle() == filter.getLearningStyle())
+                .filter(user -> filter.getLearningGoal() == null ||
+                        user.getLearningGoal() == filter.getLearningGoal())
+                .filter(user -> filter.getStudyFrequency() == null ||
+                        user.getStudyFrequency() == filter.getStudyFrequency())
                 .map(this::mapToResponse)
                 .toList();
     }
@@ -50,11 +67,21 @@ public class UserService {
         response.setId(user.getId());
         response.setName(user.getName());
         response.setEmail(user.getEmail());
+
         response.setUniversity(user.getUniversity());
         response.setCity(user.getCity());
         response.setDegreeProgram(user.getDegreeProgram());
         response.setSemester(user.getSemester());
         response.setBio(user.getBio());
+
+        response.setLanguage(user.getLanguage());
+        response.setAvailableTime(user.getAvailableTime());
+        response.setStudyMode(user.getStudyMode());
+
+        response.setLearningStyle(user.getLearningStyle());
+        response.setLearningGoal(user.getLearningGoal());
+        response.setStudyFrequency(user.getStudyFrequency());
+
         return response;
     }
 }
