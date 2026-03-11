@@ -1,13 +1,11 @@
 package com.example.backend.dto;
 
-import com.example.backend.entity.LearningGoal;
-import com.example.backend.entity.LearningStyle;
-import com.example.backend.entity.StudyFrequency;
-import com.example.backend.entity.StudyMode;
+import com.example.backend.entity.*;
 import lombok.Data;
 
 @Data
 public class UserSearchFilter {
+
     private String university;
     private String city;
     private String degreeProgram;
@@ -15,9 +13,19 @@ public class UserSearchFilter {
 
     private String language;
     private String availableTime;
+
     private StudyMode studyMode;
 
     private LearningStyle learningStyle;
     private LearningGoal learningGoal;
     private StudyFrequency studyFrequency;
+
+    private Integer minAge;
+    private Integer maxAge;
+
+    private String keyword;
+
+    private LanguageLevel languageLevel;
+
+    private String course;
 }

@@ -58,6 +58,13 @@ public class UserService {
                         user.getLearningGoal() == filter.getLearningGoal())
                 .filter(user -> filter.getStudyFrequency() == null ||
                         user.getStudyFrequency() == filter.getStudyFrequency())
+                .filter(user -> filter.getMinAge() == null || user.getAge() >= filter.getMinAge())
+                .filter(user -> filter.getMaxAge() == null || user.getAge() <= filter.getMaxAge())
+                .filter(user ->
+                        filter.getKeyword() == null ||
+                                (user.getBio() != null && user.getBio().toLowerCase().contains(filter.getKeyword().toLowerCase())) ||
+                                (user.getDegreeProgram() != null && user.getDegreeProgram().toLowerCase().contains(filter.getKeyword().toLowerCase()))
+                )
                 .map(this::mapToResponse)
                 .toList();
     }

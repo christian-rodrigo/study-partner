@@ -20,7 +20,7 @@ public class User {
 
     @Column(nullable = false)
     private String name;
-
+    private Integer age;
     private String university;
     private String city;
     private String degreeProgram;
@@ -43,4 +43,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private StudyFrequency studyFrequency;
+    @Enumerated(EnumType.STRING)
+    private LanguageLevel languageLevel;
 }
