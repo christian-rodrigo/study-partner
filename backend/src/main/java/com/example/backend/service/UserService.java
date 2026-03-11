@@ -32,9 +32,9 @@ public class UserService {
     public List<UserResponse> searchUsers(UserSearchFilter filter) {
         return userRepository.findAll()
                 .stream()
-                .filter(user -> filter.getUniversity() == null ||
+                .filter(user -> filter.getUniversityId() == null ||
                         (user.getUniversity() != null &&
-                                user.getUniversity().equalsIgnoreCase(filter.getUniversity())))
+                                user.getUniversity().getId().equals(filter.getUniversityId())))
                 .filter(user -> filter.getCity() == null ||
                         (user.getCity() != null &&
                                 user.getCity().equalsIgnoreCase(filter.getCity())))
@@ -75,7 +75,10 @@ public class UserService {
         response.setName(user.getName());
         response.setEmail(user.getEmail());
 
-        response.setUniversity(user.getUniversity());
+        if (user.getUniversity() != null) {
+            response.setUniversityId(user.getUniversity().getId());
+            response.setUniversityName(user.getUniversity().getName());
+        }
         response.setCity(user.getCity());
         response.setDegreeProgram(user.getDegreeProgram());
         response.setSemester(user.getSemester());

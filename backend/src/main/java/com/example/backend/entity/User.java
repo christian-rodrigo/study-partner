@@ -21,10 +21,13 @@ public class User {
     @Column(nullable = false)
     private String name;
     private Integer age;
-    private String university;
     private String city;
     private String degreeProgram;
     private Integer semester;
+
+    @ManyToOne
+    @JoinColumn(name = "university_id")
+    private University university;
 
     @Column(length = 1000)
     private String bio;

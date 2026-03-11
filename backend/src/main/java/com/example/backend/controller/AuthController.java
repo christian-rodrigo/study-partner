@@ -3,7 +3,9 @@ package com.example.backend.controller;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;
 import com.example.backend.dto.UserResponse;
+import com.example.backend.entity.University;
 import com.example.backend.entity.User;
+import com.example.backend.repository.UniversityRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,10 +18,14 @@ public class AuthController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UniversityRepository universityRepository;
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(UserRepository userRepository,
+                          PasswordEncoder passwordEncoder,
+                          UniversityRepository universityRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.universityRepository = universityRepository;
     }
 
     @PostMapping("/register")
@@ -29,11 +35,14 @@ public class AuthController {
         }
 
         User user = new User();
+        University university = universityRepository
+                .findById(req.getUniversityId())
+                .orElseThrow(() -> new RuntimeException("University not found"));
         user.setEmail(req.getEmail());
         user.setName(req.getName());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
 
-        user.setUniversity(req.getUniversity());
+        user.setUniversity(university);
         user.setCity(req.getCity());
         user.setDegreeProgram(req.getDegreeProgram());
         user.setSemester(req.getSemester());
@@ -54,7 +63,8 @@ public class AuthController {
         res.setEmail(saved.getEmail());
         res.setName(saved.getName());
 
-        res.setUniversity(saved.getUniversity());
+        res.setUniversityId(user.getUniversity().getId());
+        res.setUniversityName(user.getUniversity().getName());
         res.setCity(saved.getCity());
         res.setDegreeProgram(saved.getDegreeProgram());
         res.setSemester(saved.getSemester());

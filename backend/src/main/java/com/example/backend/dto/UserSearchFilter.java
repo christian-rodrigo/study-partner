@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class UserSearchFilter {
 
-    private String university;
+    private Long universityId;
     private String city;
     private String degreeProgram;
     private Integer semester;
