@@ -18,7 +18,8 @@ public class UserService {
     }
 
     public UserResponse getUserById(Long id){
-        User user = userRepository.findById(id).orElseThrow();
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         return mapToResponse(user);
     }
 

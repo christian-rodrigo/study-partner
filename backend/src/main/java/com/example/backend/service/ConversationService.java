@@ -32,8 +32,11 @@ public class ConversationService {
         Conversation conversation = conversationRepository
                 .findByUser1_IdAndUser2_Id(smallerId, biggerId)
                 .orElseGet(() -> {
-                    User user1 = userRepository.findById(smallerId).orElseThrow();
-                    User user2 = userRepository.findById(biggerId).orElseThrow();
+                    User user1 = userRepository.findById(smallerId)
+                            .orElseThrow(() -> new RuntimeException("First user not found"));
+
+                    User user2 = userRepository.findById(biggerId)
+                            .orElseThrow(() -> new RuntimeException("Second user not found"));
 
                     Conversation newConversation = new Conversation();
                     newConversation.setUser1(user1);

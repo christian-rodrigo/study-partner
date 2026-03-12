@@ -27,8 +27,11 @@ public class MessageService {
     }
 
     public MessageResponse sendMessage(Long conversationId, Long senderId, String content) {
-        Conversation conversation = conversationRepository.findById(conversationId).orElseThrow();
-        User sender = userRepository.findById(senderId).orElseThrow();
+        Conversation conversation = conversationRepository.findById(conversationId)
+                .orElseThrow(() -> new RuntimeException("Conversation not found"));
+
+        User sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
 
         boolean isParticipant =
                 conversation.getUser1().getId().equals(senderId) ||
