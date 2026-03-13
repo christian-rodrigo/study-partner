@@ -121,4 +121,11 @@ public class UserService {
         User savedUser = userRepository.save(user);
         return mapToResponse(savedUser);
     }
+    public UserResponse updateUserProfileByEmail(String email, UpdateUserProfileRequest request) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return updateUserProfile(user.getId(), request);
+    }
 }
