@@ -50,7 +50,7 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/h2-console/**"
                         ).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))

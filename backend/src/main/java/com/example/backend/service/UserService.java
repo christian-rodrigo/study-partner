@@ -3,8 +3,11 @@ package com.example.backend.service;
 import com.example.backend.dto.UserResponse;
 import com.example.backend.dto.UserSearchFilter;
 import com.example.backend.entity.User;
+import com.example.backend.repository.UniversityRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import com.example.backend.dto.UpdateUserProfileRequest;
+import com.example.backend.entity.University;
 
 import java.util.List;
 
@@ -12,11 +15,11 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository){
+    private final UniversityRepository universityRepository;
+    public UserService(UserRepository userRepository, UniversityRepository universityRepository){
         this.userRepository = userRepository;
+        this.universityRepository = universityRepository;
     }
-
     public UserResponse getUserById(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -94,5 +97,28 @@ public class UserService {
         response.setStudyFrequency(user.getStudyFrequency());
 
         return response;
+    }
+    public UserResponse updateUserProfile(Long userId, UpdateUserProfileRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        University university = universityRepository.findById(request.getUniversityId())
+                .orElseThrow(() -> new RuntimeException("University not found"));
+
+        user.setName(request.getName());
+        user.setUniversity(university);
+        user.setCity(request.getCity());
+        user.setDegreeProgram(request.getDegreeProgram());
+        user.setSemester(request.getSemester());
+        user.setBio(request.getBio());
+        user.setLanguage(request.getLanguage());
+        user.setAvailableTime(request.getAvailableTime());
+        user.setStudyMode(request.getStudyMode());
+        user.setLearningStyle(request.getLearningStyle());
+        user.setLearningGoal(request.getLearningGoal());
+        user.setStudyFrequency(request.getStudyFrequency());
+
+        User savedUser = userRepository.save(user);
+        return mapToResponse(savedUser);
     }
 }

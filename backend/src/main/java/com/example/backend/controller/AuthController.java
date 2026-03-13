@@ -93,4 +93,5 @@ public class AuthController {
 
         return UserMapper.toResponse(user);
     }
+
 }

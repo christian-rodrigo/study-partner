@@ -4,6 +4,8 @@ import com.example.backend.dto.UserResponse;
 import com.example.backend.dto.UserSearchFilter;
 import com.example.backend.service.UserService;
 import org.springframework.web.bind.annotation.*;
+import com.example.backend.dto.UpdateUserProfileRequest;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -30,5 +32,12 @@ public class UserController {
     @PostMapping("/search")
     public List<UserResponse> searchUsers(@RequestBody UserSearchFilter filter) {
         return userService.searchUsers(filter);
+    }
+    @PutMapping("/me")
+    public UserResponse updateUserProfile(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateUserProfileRequest request
+    ) {
+        return userService.updateUserProfile(id, request);
     }
 }
