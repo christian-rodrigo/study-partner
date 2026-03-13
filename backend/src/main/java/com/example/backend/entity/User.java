@@ -1,5 +1,6 @@
 package com.example.backend.entity;
 
+import com.example.backend.enums.UserType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -48,4 +49,8 @@ public class User {
     private StudyFrequency studyFrequency;
     @Enumerated(EnumType.STRING)
     private LanguageLevel languageLevel;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserType role;
 }

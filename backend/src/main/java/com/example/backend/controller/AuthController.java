@@ -1,13 +1,18 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.AuthResponse;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;
+import com.example.backend.dto.UserMapper;
 import com.example.backend.dto.UserResponse;
 import com.example.backend.entity.University;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UniversityRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.security.JwtService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,24 +25,29 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UniversityRepository universityRepository;
+    private final JwtService jwtService;
 
     public AuthController(UserRepository userRepository,
                           PasswordEncoder passwordEncoder,
-                          UniversityRepository universityRepository) {
+                          UniversityRepository universityRepository,
+                          JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.universityRepository = universityRepository;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
-    public UserResponse register(@Valid @RequestBody RegisterRequest req) {
+    public UserResponse register(@RequestBody RegisterRequest req) {
         if (userRepository.findByEmail(req.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
 
+        University university = universityRepository
+                .findById(req.getUniversityId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "University not found"));
+
         User user = new User();
-        University university = universityRepository.findById(req.getUniversityId())
-                .orElseThrow(() -> new RuntimeException("University not found"));
         user.setEmail(req.getEmail());
         user.setName(req.getName());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
@@ -55,46 +65,32 @@ public class AuthController {
         user.setLearningStyle(req.getLearningStyle());
         user.setLearningGoal(req.getLearningGoal());
         user.setStudyFrequency(req.getStudyFrequency());
+        user.setRole(req.getUserType());
 
         User saved = userRepository.save(user);
-
-        UserResponse res = new UserResponse();
-        res.setId(saved.getId());
-        res.setEmail(saved.getEmail());
-        res.setName(saved.getName());
-
-        res.setUniversityId(user.getUniversity().getId());
-        res.setUniversityName(user.getUniversity().getName());
-        res.setCity(saved.getCity());
-        res.setDegreeProgram(saved.getDegreeProgram());
-        res.setSemester(saved.getSemester());
-        res.setBio(saved.getBio());
-
-        res.setLanguage(saved.getLanguage());
-        res.setAvailableTime(saved.getAvailableTime());
-        res.setStudyMode(saved.getStudyMode());
-
-        res.setLearningStyle(saved.getLearningStyle());
-        res.setLearningGoal(saved.getLearningGoal());
-        res.setStudyFrequency(saved.getStudyFrequency());
-
-        return res;
+        return UserMapper.toResponse(saved);
     }
 
     @PostMapping("/login")
-    public String login(@Valid @RequestBody LoginRequest req) {
+    public AuthResponse login(@RequestBody LoginRequest req) {
         User user = userRepository.findByEmail(req.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials"));
 
         if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
 
-        return "login ok";
+        String token = jwtService.generateToken(user);
+        return new AuthResponse(token, UserMapper.toResponse(user));
     }
 
     @GetMapping("/me")
-    public String me() {
-        return "current user (JWT later)";
+    public UserResponse me(@AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getSubject();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        return UserMapper.toResponse(user);
     }
 }

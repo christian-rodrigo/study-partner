@@ -4,6 +4,7 @@ import com.example.backend.entity.LearningGoal;
 import com.example.backend.entity.LearningStyle;
 import com.example.backend.entity.StudyFrequency;
 import com.example.backend.entity.StudyMode;
+import com.example.backend.enums.UserType;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -34,10 +35,14 @@ public class RegisterRequest {
     private Integer semester;
 
     private String bio;
+
     private String language;
     private String availableTime;
     private StudyMode studyMode;
+
     private LearningStyle learningStyle;
     private LearningGoal learningGoal;
     private StudyFrequency studyFrequency;
+
+    private UserType userType;
 }
