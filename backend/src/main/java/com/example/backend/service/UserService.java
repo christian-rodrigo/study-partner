@@ -1,13 +1,14 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.UpdateUserProfileRequest;
 import com.example.backend.dto.UserResponse;
 import com.example.backend.dto.UserSearchFilter;
+import com.example.backend.entity.University;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UniversityRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.specification.UserSpecification;
 import org.springframework.stereotype.Service;
-import com.example.backend.dto.UpdateUserProfileRequest;
-import com.example.backend.entity.University;
 
 import java.util.List;
 
@@ -16,11 +17,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UniversityRepository universityRepository;
-    public UserService(UserRepository userRepository, UniversityRepository universityRepository){
+
+    public UserService(UserRepository userRepository, UniversityRepository universityRepository) {
         this.userRepository = userRepository;
         this.universityRepository = universityRepository;
     }
-    public UserResponse getUserById(Long id){
+
+    public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return mapToResponse(user);
@@ -34,41 +37,8 @@ public class UserService {
     }
 
     public List<UserResponse> searchUsers(UserSearchFilter filter) {
-        return userRepository.findAll()
+        return userRepository.findAll(UserSpecification.withFilters(filter))
                 .stream()
-                .filter(user -> filter.getUniversityId() == null ||
-                        (user.getUniversity() != null &&
-                                user.getUniversity().getId().equals(filter.getUniversityId())))
-                .filter(user -> filter.getCity() == null ||
-                        (user.getCity() != null &&
-                                user.getCity().equalsIgnoreCase(filter.getCity())))
-                .filter(user -> filter.getDegreeProgram() == null ||
-                        (user.getDegreeProgram() != null &&
-                                user.getDegreeProgram().equalsIgnoreCase(filter.getDegreeProgram())))
-                .filter(user -> filter.getSemester() == null ||
-                        (user.getSemester() != null &&
-                                user.getSemester().equals(filter.getSemester())))
-                .filter(user -> filter.getLanguage() == null ||
-                        (user.getLanguage() != null &&
-                                user.getLanguage().equalsIgnoreCase(filter.getLanguage())))
-                .filter(user -> filter.getAvailableTime() == null ||
-                        (user.getAvailableTime() != null &&
-                                user.getAvailableTime().equalsIgnoreCase(filter.getAvailableTime())))
-                .filter(user -> filter.getStudyMode() == null ||
-                        user.getStudyMode() == filter.getStudyMode())
-                .filter(user -> filter.getLearningStyle() == null ||
-                        user.getLearningStyle() == filter.getLearningStyle())
-                .filter(user -> filter.getLearningGoal() == null ||
-                        user.getLearningGoal() == filter.getLearningGoal())
-                .filter(user -> filter.getStudyFrequency() == null ||
-                        user.getStudyFrequency() == filter.getStudyFrequency())
-                .filter(user -> filter.getMinAge() == null || user.getAge() >= filter.getMinAge())
-                .filter(user -> filter.getMaxAge() == null || user.getAge() <= filter.getMaxAge())
-                .filter(user ->
-                        filter.getKeyword() == null ||
-                                (user.getBio() != null && user.getBio().toLowerCase().contains(filter.getKeyword().toLowerCase())) ||
-                                (user.getDegreeProgram() != null && user.getDegreeProgram().toLowerCase().contains(filter.getKeyword().toLowerCase()))
-                )
                 .map(this::mapToResponse)
                 .toList();
     }
@@ -83,21 +53,21 @@ public class UserService {
             response.setUniversityId(user.getUniversity().getId());
             response.setUniversityName(user.getUniversity().getName());
         }
+
         response.setCity(user.getCity());
         response.setDegreeProgram(user.getDegreeProgram());
         response.setSemester(user.getSemester());
         response.setBio(user.getBio());
-
         response.setLanguage(user.getLanguage());
         response.setAvailableTime(user.getAvailableTime());
         response.setStudyMode(user.getStudyMode());
-
         response.setLearningStyle(user.getLearningStyle());
         response.setLearningGoal(user.getLearningGoal());
         response.setStudyFrequency(user.getStudyFrequency());
 
         return response;
     }
+
     public UserResponse updateUserProfile(Long userId, UpdateUserProfileRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -121,8 +91,8 @@ public class UserService {
         User savedUser = userRepository.save(user);
         return mapToResponse(savedUser);
     }
-    public UserResponse updateUserProfileByEmail(String email, UpdateUserProfileRequest request) {
 
+    public UserResponse updateUserProfileByEmail(String email, UpdateUserProfileRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

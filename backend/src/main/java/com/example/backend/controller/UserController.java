@@ -2,11 +2,14 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.UserResponse;
 import com.example.backend.dto.UserSearchFilter;
+import com.example.backend.entity.User;
 import com.example.backend.service.UserService;
 import org.springframework.web.bind.annotation.*;
 import com.example.backend.dto.UpdateUserProfileRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
+import jakarta.validation.Valid;
+import com.example.backend.dto.UpdateUserProfileRequest;
 
 import java.util.List;
 
@@ -31,19 +34,13 @@ public class UserController {
     }
 
     @PostMapping("/search")
-    public List<UserResponse> searchUsers(@RequestBody UserSearchFilter filter) {
+    public List<UserResponse> searchUsers(@Valid @RequestBody UserSearchFilter filter) {
         return userService.searchUsers(filter);
     }
 
     @PutMapping("/me")
-    public UserResponse updateMyProfile(
-            Authentication authentication,
-            @Valid @RequestBody UpdateUserProfileRequest request
-    ) {
-
-        String email = authentication.getName();
-
-        return userService.updateUserProfileByEmail(email, request);
+    public UserResponse updateUserProfile(@PathVariable Long userId,
+                                          @Valid @RequestBody UpdateUserProfileRequest request) {
+        return userService.updateUserProfile(userId, request);
     }
-
 }
