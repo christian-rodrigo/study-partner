@@ -1,9 +1,9 @@
 package com.example.backend.dto;
 
-import com.example.backend.entity.LearningGoal;
-import com.example.backend.entity.LearningStyle;
-import com.example.backend.entity.StudyFrequency;
-import com.example.backend.entity.StudyMode;
+import com.example.backend.enums.LearningGoal;
+import com.example.backend.enums.LearningStyle;
+import com.example.backend.enums.StudyFrequency;
+import com.example.backend.enums.StudyMode;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
