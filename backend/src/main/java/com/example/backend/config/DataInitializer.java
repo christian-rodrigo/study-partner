@@ -1,16 +1,20 @@
 package com.example.backend.config;
 
 import com.example.backend.entity.University;
+import com.example.backend.entity.User;
+import com.example.backend.enums.UserType;
 import com.example.backend.repository.UniversityRepository;
+import com.example.backend.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class DataInitializer {
 
     @Bean
-    CommandLineRunner loadUniversities(UniversityRepository universityRepository) {
+    CommandLineRunner loadUniversities(PasswordEncoder passwordEncoder, UniversityRepository universityRepository, UserRepository userRepository) {
         return args -> {
             if (universityRepository.count() == 0) {
                 University u1 = new University();
@@ -29,6 +33,21 @@ public class DataInitializer {
                 universityRepository.save(u2);
                 universityRepository.save(u3);
                 universityRepository.save(u4);
+
+
+                for (int i = 1; i <= 5; i++) {
+                    User user = new User();
+                    user.setEmail("user" + i + "@example.com");
+                    user.setPassword(passwordEncoder.encode("1234"));
+                    user.setName("User " + i);
+                    user.setRole(i % 2 == 0 ? UserType.TUTOR : UserType.STUDENT);
+                    user.setUniversity(i % 2 == 0 ? u4 : u3);
+                    user.setCity("Dortmund");
+                    user.setDegreeProgram("Computer Science");
+                    user.setSemester((i % 6) + 1);
+
+                    userRepository.save(user);
+                }
             }
         };
     }
