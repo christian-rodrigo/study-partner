@@ -42,5 +42,107 @@ public class UserSearchFilter {
     @Size(max = 100, message = "Keyword must not exceed 100 characters")
     private String keyword;
 
-    // getters and setters
+    public Long getUniversityId() {
+        return universityId;
+    }
+
+    public void setUniversityId(Long universityId) {
+        this.universityId = universityId;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDegreeProgram() {
+        return degreeProgram;
+    }
+
+    public void setDegreeProgram(String degreeProgram) {
+        this.degreeProgram = degreeProgram;
+    }
+
+    public Integer getSemester() {
+        return semester;
+    }
+
+    public void setSemester(Integer semester) {
+        this.semester = semester;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getAvailableTime() {
+        return availableTime;
+    }
+
+    public void setAvailableTime(String availableTime) {
+        this.availableTime = availableTime;
+    }
+
+    public StudyMode getStudyMode() {
+        return studyMode;
+    }
+
+    public void setStudyMode(StudyMode studyMode) {
+        this.studyMode = studyMode;
+    }
+
+    public LearningStyle getLearningStyle() {
+        return learningStyle;
+    }
+
+    public void setLearningStyle(LearningStyle learningStyle) {
+        this.learningStyle = learningStyle;
+    }
+
+    public LearningGoal getLearningGoal() {
+        return learningGoal;
+    }
+
+    public void setLearningGoal(LearningGoal learningGoal) {
+        this.learningGoal = learningGoal;
+    }
+
+    public StudyFrequency getStudyFrequency() {
+        return studyFrequency;
+    }
+
+    public void setStudyFrequency(StudyFrequency studyFrequency) {
+        this.studyFrequency = studyFrequency;
+    }
+
+    public Integer getMinAge() {
+        return minAge;
+    }
+
+    public void setMinAge(Integer minAge) {
+        this.minAge = minAge;
+    }
+
+    public Integer getMaxAge() {
+        return maxAge;
+    }
+
+    public void setMaxAge(Integer maxAge) {
+        this.maxAge = maxAge;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 }

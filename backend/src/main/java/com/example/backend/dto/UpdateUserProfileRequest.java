@@ -47,5 +47,99 @@ public class UpdateUserProfileRequest {
     @NotNull(message = "Study frequency is required")
     private StudyFrequency studyFrequency;
 
-    // getters and setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getUniversityId() {
+        return universityId;
+    }
+
+    public void setUniversityId(Long universityId) {
+        this.universityId = universityId;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDegreeProgram() {
+        return degreeProgram;
+    }
+
+    public void setDegreeProgram(String degreeProgram) {
+        this.degreeProgram = degreeProgram;
+    }
+
+    public Integer getSemester() {
+        return semester;
+    }
+
+    public void setSemester(Integer semester) {
+        this.semester = semester;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getAvailableTime() {
+        return availableTime;
+    }
+
+    public void setAvailableTime(String availableTime) {
+        this.availableTime = availableTime;
+    }
+
+    public StudyMode getStudyMode() {
+        return studyMode;
+    }
+
+    public void setStudyMode(StudyMode studyMode) {
+        this.studyMode = studyMode;
+    }
+
+    public LearningStyle getLearningStyle() {
+        return learningStyle;
+    }
+
+    public void setLearningStyle(LearningStyle learningStyle) {
+        this.learningStyle = learningStyle;
+    }
+
+    public LearningGoal getLearningGoal() {
+        return learningGoal;
+    }
+
+    public void setLearningGoal(LearningGoal learningGoal) {
+        this.learningGoal = learningGoal;
+    }
+
+    public StudyFrequency getStudyFrequency() {
+        return studyFrequency;
+    }
+
+    public void setStudyFrequency(StudyFrequency studyFrequency) {
+        this.studyFrequency = studyFrequency;
+    }
 }
