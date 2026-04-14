@@ -1,6 +1,4 @@
 INSERT INTO learning_places (name, address, city, type, image_url) VALUES
-                                                                       ('Central Library', 'Main Street 1', 'BERLIN', 'LIBRARY', 'https://via.placeholder.com/300x200'),
-                                                                       ('Cafe Mocha', 'Coffee Lane 5', 'BERLIN', 'CAFE', 'https://via.placeholder.com/300x200'),
-                                                                       ('University Hall A', 'Campus Rd 10', 'MUNICH', 'UNIVERSITY', 'https://via.placeholder.com/300x200'),
-                                                                       ('Study Hub', 'Tech Street 7', 'HAMBURG', 'COWORKING', 'https://via.placeholder.com/300x200');
-
+                                                                       ('Central Library', 'Main Street 1', 'BERLIN', 'LIBRARY', 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=400&h=300&fit=crop'),
+                                                                       ('Cafe Mocha', 'Coffee Lane 5', 'BERLIN', 'CAFE', 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=400&h=300&fit=crop'),
+                                                                       ('Study Hub', 'Tech Street 7', 'HAMBURG', 'COWORKING', 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400&h=300&fit=crop');
