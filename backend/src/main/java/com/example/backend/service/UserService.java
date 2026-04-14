@@ -72,25 +72,50 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        University university = universityRepository.findById(request.getUniversityId())
-                .orElseThrow(() -> new RuntimeException("University not found"));
+            if (request.getUniversityId() != null) {
+                University university = universityRepository.findById(request.getUniversityId())
+                        .orElseThrow(() -> new RuntimeException("University not found"));
+                user.setUniversity(university);
+            }
 
-        user.setName(request.getName());
-        user.setUniversity(university);
-        user.setCity(request.getCity());
-        user.setDegreeProgram(request.getDegreeProgram());
-        user.setSemester(request.getSemester());
-        user.setBio(request.getBio());
-        user.setLanguage(request.getLanguage());
-        user.setAvailableTime(request.getAvailableTime());
-        user.setStudyMode(request.getStudyMode());
-        user.setLearningStyle(request.getLearningStyle());
-        user.setLearningGoal(request.getLearningGoal());
-        user.setStudyFrequency(request.getStudyFrequency());
+            if (request.getName() != null) {
+                user.setName(request.getName());
+            }
+            if (request.getCity() != null) {
+                user.setCity(request.getCity());
+            }
+            if (request.getDegreeProgram() != null) {
+                user.setDegreeProgram(request.getDegreeProgram());
+            }
+            if (request.getSemester() != null) {
+                user.setSemester(request.getSemester());
+            }
+            if (request.getBio() != null) {
+                user.setBio(request.getBio());
+            }
+            if (request.getLanguage() != null) {
+                user.setLanguage(request.getLanguage());
+            }
+            if (request.getAvailableTime() != null) {
+                user.setAvailableTime(request.getAvailableTime());
+            }
+            if (request.getStudyMode() != null) {
+                user.setStudyMode(request.getStudyMode());
+            }
+            if (request.getLearningStyle() != null) {
+                user.setLearningStyle(request.getLearningStyle());
+            }
+            if (request.getLearningGoal() != null) {
+                user.setLearningGoal(request.getLearningGoal());
+            }
+            if (request.getStudyFrequency() != null) {
+                user.setStudyFrequency(request.getStudyFrequency());
+            }
 
-        User savedUser = userRepository.save(user);
-        return mapToResponse(savedUser);
-    }
+            User savedUser = userRepository.save(user);
+            return mapToResponse(savedUser);
+        }
+
 
     public UserResponse updateUserProfileByEmail(String email, UpdateUserProfileRequest request) {
         User user = userRepository.findByEmail(email)

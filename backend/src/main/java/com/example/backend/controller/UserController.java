@@ -35,7 +35,7 @@ public class UserController {
         return userService.searchUsers(filter);
     }
 
-    @PutMapping("/me")
+    @PatchMapping("/me")
     public UserResponse updateMyProfile(
             Authentication authentication,
             @Valid @RequestBody UpdateUserProfileRequest request
