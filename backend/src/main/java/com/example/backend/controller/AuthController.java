@@ -1,10 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.AuthResponse;
-import com.example.backend.dto.LoginRequest;
-import com.example.backend.dto.RegisterRequest;
-import com.example.backend.dto.UserMapper;
-import com.example.backend.dto.UserResponse;
+import com.example.backend.dto.*;
 import com.example.backend.entity.University;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UniversityRepository;
@@ -17,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")

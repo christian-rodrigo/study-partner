@@ -35,15 +35,29 @@ public class DataInitializer {
                 universityRepository.save(u4);
 
 
+                String[] degreePrograms = {
+                        "Computer Science",
+                        "Business Administration",
+                        "Mechanical Engineering",
+                        "Electrical Engineering",
+                        "Psychology",
+                        "Mathematics",
+                        "Data Science"
+                };
+
                 for (int i = 1; i <= 5; i++) {
                     User user = new User();
+
                     user.setEmail("user" + i + "@example.com");
                     user.setPassword(passwordEncoder.encode("1234"));
-                    user.setName("User " + i);
+                    user.setName("Student " + i);
                     user.setRole(i % 2 == 0 ? UserType.TUTOR : UserType.STUDENT);
                     user.setUniversity(i % 2 == 0 ? u4 : u3);
                     user.setCity("Dortmund");
-                    user.setDegreeProgram("Computer Science");
+
+                    String degree = degreePrograms[(int) (Math.random() * degreePrograms.length)];
+                    user.setDegreeProgram(degree);
+
                     user.setSemester((i % 6) + 1);
 
                     userRepository.save(user);
