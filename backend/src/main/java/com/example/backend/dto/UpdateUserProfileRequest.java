@@ -38,4 +38,5 @@ public class UpdateUserProfileRequest {
 
     private StudyFrequency studyFrequency;
 
+    private String avatarSeed;
 }

@@ -1,7 +1,9 @@
 package com.example.backend.dto;
 
 import com.example.backend.entity.User;
+import lombok.Getter;
 
+@Getter
 public class DiscoverUserDTO {
     private Long id;
     private String name;
@@ -19,6 +21,7 @@ public class DiscoverUserDTO {
     private String learningGoal;
     private String studyFrequency;
     private int score;
+    private String avatarSeed;
 
     public DiscoverUserDTO(User user, int score) {
         this.id = user.getId();
@@ -37,69 +40,7 @@ public class DiscoverUserDTO {
         this.learningGoal = user.getLearningGoal() != null ? user.getLearningGoal().name() : null;
         this.studyFrequency = user.getStudyFrequency() != null ? user.getStudyFrequency().name() : null;
         this.score = score;
+        this.avatarSeed = user.getAvatarSeed();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Long getUniversityId() {
-        return universityId;
-    }
-
-    public String getUniversityName() {
-        return universityName;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getDegreeProgram() {
-        return degreeProgram;
-    }
-
-    public Integer getSemester() {
-        return semester;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public String getAvailableTime() {
-        return availableTime;
-    }
-
-    public String getStudyMode() {
-        return studyMode;
-    }
-
-    public String getLearningStyle() {
-        return learningStyle;
-    }
-
-    public String getLearningGoal() {
-        return learningGoal;
-    }
-
-    public String getStudyFrequency() {
-        return studyFrequency;
-    }
-
-    public int getScore() {
-        return score;
-    }
 }

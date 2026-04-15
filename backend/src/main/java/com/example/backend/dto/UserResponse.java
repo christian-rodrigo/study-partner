@@ -26,5 +26,6 @@ public class UserResponse {
     private LearningStyle learningStyle;
     private LearningGoal learningGoal;
     private StudyFrequency studyFrequency;
+    private String avatarSeed;
 
 }

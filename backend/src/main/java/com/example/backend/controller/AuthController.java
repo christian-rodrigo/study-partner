@@ -12,9 +12,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import jakarta.validation.Valid;
-
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -64,6 +62,7 @@ public class AuthController {
         user.setLearningGoal(req.getLearningGoal());
         user.setStudyFrequency(req.getStudyFrequency());
         user.setRole(req.getUserType());
+        user.setAvatarSeed(UUID.randomUUID().toString());
 
         User saved = userRepository.save(user);
         return UserMapper.toResponse(saved);

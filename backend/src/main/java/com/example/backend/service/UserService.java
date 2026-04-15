@@ -64,6 +64,7 @@ public class UserService {
         response.setLearningStyle(user.getLearningStyle());
         response.setLearningGoal(user.getLearningGoal());
         response.setStudyFrequency(user.getStudyFrequency());
+        response.setAvatarSeed(user.getAvatarSeed());
 
         return response;
     }
@@ -110,6 +111,10 @@ public class UserService {
             }
             if (request.getStudyFrequency() != null) {
                 user.setStudyFrequency(request.getStudyFrequency());
+            }
+
+            if (request.getAvatarSeed() != null) {
+            user.setAvatarSeed(request.getAvatarSeed());
             }
 
             User savedUser = userRepository.save(user);

@@ -30,6 +30,7 @@ public class UserMapper {
         res.setLearningStyle(user.getLearningStyle());
         res.setLearningGoal(user.getLearningGoal());
         res.setStudyFrequency(user.getStudyFrequency());
+        res.setAvatarSeed(user.getAvatarSeed());
 
         return res;
     }

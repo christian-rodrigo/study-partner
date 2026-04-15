@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.UUID;
+
 @Configuration
 public class DataInitializer {
 
@@ -54,6 +56,7 @@ public class DataInitializer {
                     user.setRole(i % 2 == 0 ? UserType.TUTOR : UserType.STUDENT);
                     user.setUniversity(i % 2 == 0 ? u4 : u3);
                     user.setCity("Dortmund");
+                    user.setAvatarSeed(UUID.randomUUID().toString());
 
                     String degree = degreePrograms[(int) (Math.random() * degreePrograms.length)];
                     user.setDegreeProgram(degree);

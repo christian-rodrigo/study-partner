@@ -53,4 +53,6 @@ public class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserType role;
-}
+
+    @Column(name = "avatar_seed")
+    private String avatarSeed;}
