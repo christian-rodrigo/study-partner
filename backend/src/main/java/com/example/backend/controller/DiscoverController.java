@@ -5,6 +5,7 @@ import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.DiscoverService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,9 +20,9 @@ public class DiscoverController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/{userId}")
-    public List<DiscoverUserDTO> getDiscoverUsers(@PathVariable Long userId) {
-        User currentUser = userRepository.findById(userId)
+    @GetMapping()
+    public List<DiscoverUserDTO> getDiscoverUsers(Authentication authentication) {
+        User currentUser = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return discoverService.getRecommendations(currentUser);
