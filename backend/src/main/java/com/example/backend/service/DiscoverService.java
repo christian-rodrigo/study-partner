@@ -29,7 +29,7 @@ public class DiscoverService {
     }
 
     public int calculateMatchPercentage(User currentUser, User otherUser) {
-        int maxScore = 135;
+        int maxScore = 120;
         int score = calculateScore(currentUser, otherUser);
         return (score * 100) / maxScore;
     }
