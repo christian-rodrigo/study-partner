@@ -2,8 +2,9 @@ package com.example.backend.matching;
 
 import com.example.backend.entity.User;
 import org.springframework.stereotype.Component;
-
+import org.springframework.context.annotation.Primary;
 @Component
+@Primary
 public class WeightedMatchingStrategy implements MatchingStrategy {
 
     private static final int MAXIMUM_SCORE = 120;
