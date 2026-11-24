@@ -2,7 +2,7 @@ package com.example.backend.matching;
 
 import com.example.backend.entity.User;
 import org.springframework.stereotype.Component;
-import org.springframework.context.annotation.Primary;
+
 @Component
 public class WeightedMatchingStrategy implements MatchingStrategy {
 
@@ -12,57 +12,128 @@ public class WeightedMatchingStrategy implements MatchingStrategy {
     public MatchResult calculate(User currentUser, User candidate) {
 
         int score = 0;
+        int availableMaximumScore = 0;
 
-        if (equalsIgnoreCase(
+        // Studiengang
+        if (bothAvailable(
                 currentUser.getDegreeProgram(),
                 candidate.getDegreeProgram())) {
-            score += 30;
+
+            availableMaximumScore += 30;
+
+            if (equalsIgnoreCase(
+                    currentUser.getDegreeProgram(),
+                    candidate.getDegreeProgram())) {
+                score += 30;
+            }
         }
 
-        if (sameUniversity(currentUser, candidate)) {
-            score += 15;
+        // Hochschule
+        if (universitiesAvailable(currentUser, candidate)) {
+
+            availableMaximumScore += 15;
+
+            if (sameUniversity(currentUser, candidate)) {
+                score += 15;
+            }
         }
 
-        if (equalsIgnoreCase(
+        // Stadt
+        if (bothAvailable(
                 currentUser.getCity(),
                 candidate.getCity())) {
-            score += 10;
+
+            availableMaximumScore += 10;
+
+            if (equalsIgnoreCase(
+                    currentUser.getCity(),
+                    candidate.getCity())) {
+                score += 10;
+            }
         }
 
-        if (isSimilarSemester(currentUser, candidate)) {
-            score += 15;
+        // Semester
+        if (currentUser.getSemester() != null
+                && candidate.getSemester() != null) {
+
+            availableMaximumScore += 15;
+
+            if (isSimilarSemester(currentUser, candidate)) {
+                score += 15;
+            }
         }
 
-        if (equalsIgnoreCase(
+        // Verfügbare Lernzeit
+        if (bothAvailable(
                 currentUser.getAvailableTime(),
                 candidate.getAvailableTime())) {
-            score += 20;
+
+            availableMaximumScore += 20;
+
+            if (equalsIgnoreCase(
+                    currentUser.getAvailableTime(),
+                    candidate.getAvailableTime())) {
+                score += 20;
+            }
         }
 
+        // Lernform
         if (currentUser.getStudyMode() != null
-                && currentUser.getStudyMode() == candidate.getStudyMode()) {
-            score += 10;
+                && candidate.getStudyMode() != null) {
+
+            availableMaximumScore += 10;
+
+            if (currentUser.getStudyMode() == candidate.getStudyMode()) {
+                score += 10;
+            }
         }
 
-        if (equalsIgnoreCase(
+        // Sprache
+        if (bothAvailable(
                 currentUser.getLanguage(),
                 candidate.getLanguage())) {
-            score += 10;
+
+            availableMaximumScore += 10;
+
+            if (equalsIgnoreCase(
+                    currentUser.getLanguage(),
+                    candidate.getLanguage())) {
+                score += 10;
+            }
         }
 
+        // Lernstil
         if (currentUser.getLearningStyle() != null
-                && currentUser.getLearningStyle() == candidate.getLearningStyle()) {
-            score += 10;
+                && candidate.getLearningStyle() != null) {
+
+            availableMaximumScore += 10;
+
+            if (currentUser.getLearningStyle()
+                    == candidate.getLearningStyle()) {
+                score += 10;
+            }
         }
 
         int percentage = (score * 100) / MAXIMUM_SCORE;
 
+        double informationCoverage =
+                (availableMaximumScore * 100.0) / MAXIMUM_SCORE;
+
         return new MatchResult(
                 score,
                 MAXIMUM_SCORE,
-                percentage
+                percentage,
+                informationCoverage
         );
     }
+
+
+
+    private boolean bothAvailable(String first, String second) {
+        return first != null && !first.isBlank()
+                && second != null && !second.isBlank();
+    }
+
 
     private boolean equalsIgnoreCase(String first, String second) {
         return first != null
@@ -70,14 +141,23 @@ public class WeightedMatchingStrategy implements MatchingStrategy {
                 && first.equalsIgnoreCase(second);
     }
 
-    private boolean sameUniversity(User first, User second) {
+
+    private boolean universitiesAvailable(User first, User second) {
         return first.getUniversity() != null
                 && second.getUniversity() != null
+                && first.getUniversity().getName() != null
+                && second.getUniversity().getName() != null;
+    }
+
+
+    private boolean sameUniversity(User first, User second) {
+        return universitiesAvailable(first, second)
                 && equalsIgnoreCase(
                 first.getUniversity().getName(),
                 second.getUniversity().getName()
         );
     }
+
 
     private boolean isSimilarSemester(User first, User second) {
         return first.getSemester() != null

@@ -121,12 +121,19 @@ public class ContextSensitiveMatchingStrategy implements MatchingStrategy {
                 ? 0
                 : (score * 100) / availableMaximumScore;
 
+        int totalMaximumScore = totalWeight(weights);
+
+        double informationCoverage =
+                (availableMaximumScore * 100.0) / totalMaximumScore;
+
         return new MatchResult(
                 score,
                 availableMaximumScore,
-                percentage
+                percentage,
+                informationCoverage
         );
     }
+
 
     private Weights selectWeights(User currentUser) {
 
@@ -150,52 +157,68 @@ public class ContextSensitiveMatchingStrategy implements MatchingStrategy {
         return switch (studyMode) {
 
             case ONLINE -> new Weights(
-                    24, // Studiengang
-                    6,  // Hochschule
-                    6,  // Stadt
-                    12, // Semester
-                    24, // Lernzeit
-                    24, // Lernform
-                    12, // Sprache
-                    12  // Lernstil
+                    30, // Studiengang
+                    5,  // Hochschule
+                    5,  // Stadt
+                    15, // Semester
+                    20, // Lernzeit
+                    10, // Lernform
+                    10, // Sprache
+                    10  // Lernstil
             );
 
             case OFFLINE -> new Weights(
-                    18, // Studiengang
-                    18, // Hochschule
-                    18, // Stadt
-                    10, // Semester
-                    18, // Lernzeit
-                    18, // Lernform
+                    30, // Studiengang
+                    20, // Hochschule
+                    15, // Stadt
+                    15, // Semester
+                    20, // Lernzeit
+                    10, // Lernform
                     10, // Sprache
                     10  // Lernstil
             );
 
             case BOTH -> new Weights(
-                    20, // Studiengang
-                    12, // Hochschule
-                    12, // Stadt
-                    12, // Semester
+                    30, // Studiengang
+                    15, // Hochschule
+                    10, // Stadt
+                    15, // Semester
                     20, // Lernzeit
-                    20, // Lernform
-                    12, // Sprache
-                    12  // Lernstil
+                    10, // Lernform
+                    10, // Sprache
+                    10  // Lernstil
             );
         };
     }
+
+
+    private int totalWeight(Weights weights) {
+        return weights.degreeProgram()
+                + weights.university()
+                + weights.city()
+                + weights.semester()
+                + weights.availableTime()
+                + weights.studyMode()
+                + weights.language()
+                + weights.learningStyle();
+    }
+
 
     private boolean hasText(String value) {
         return value != null && !value.isBlank();
     }
 
+
     private boolean equalsIgnoreCase(String first, String second) {
         return first.equalsIgnoreCase(second);
     }
+
 
     private boolean hasUniversity(User user) {
         return user.getUniversity() != null
                 && hasText(user.getUniversity().getName());
     }
+
 
     private boolean sameUniversity(User first, User second) {
         return first.getUniversity()
@@ -203,11 +226,13 @@ public class ContextSensitiveMatchingStrategy implements MatchingStrategy {
                 .equalsIgnoreCase(second.getUniversity().getName());
     }
 
+
     private boolean isSimilarSemester(User first, User second) {
         return Math.abs(
                 first.getSemester() - second.getSemester()
         ) <= 1;
     }
+
 
     private record Weights(
             int degreeProgram,

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class NormalizedMatchingStrategy implements MatchingStrategy {
 
+    private static final int MAXIMUM_SCORE = 120;
+
     @Override
     public MatchResult calculate(User currentUser, User candidate) {
 
@@ -118,31 +120,40 @@ public class NormalizedMatchingStrategy implements MatchingStrategy {
                 ? 0
                 : (score * 100) / availableMaximumScore;
 
+        double informationCoverage =
+                (availableMaximumScore * 100.0) / MAXIMUM_SCORE;
+
         return new MatchResult(
                 score,
                 availableMaximumScore,
-                percentage
+                percentage,
+                informationCoverage
         );
     }
+
 
     private boolean hasText(String value) {
         return value != null && !value.isBlank();
     }
 
+
     private boolean equalsIgnoreCase(String first, String second) {
         return first.equalsIgnoreCase(second);
     }
+
 
     private boolean hasUniversity(User user) {
         return user.getUniversity() != null
                 && hasText(user.getUniversity().getName());
     }
 
+
     private boolean sameUniversity(User first, User second) {
         return first.getUniversity()
                 .getName()
                 .equalsIgnoreCase(second.getUniversity().getName());
     }
+
 
     private boolean isSimilarSemester(User first, User second) {
         return Math.abs(
